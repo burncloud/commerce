@@ -1,8 +1,10 @@
-# burncloud-template
+# BurnCloud 业务实现仓库
 
-BurnCloud 各 Rust crate 仓库的模板。仓库根的清单、锁文件和工具链可以直接复制到新仓库。`.github/workflows/ci.yml` 调用 [burncloud/ci](https://github.com/burncloud/ci) 的共享工作流，用来在另一个仓库里跑出真实的检查名。
+契约类型在 [burncloud/next](https://github.com/burncloud/next)。
 
-当前钉的是带注释的 tag `v1.0.0`，它指向 `56aa8aabde61bc50e41e0b63ed345caa4810604a`。`uses` 只允许 40 位完整 SHA，或 `vX.Y.Z` 这种不可变标签。禁止 `v1` 这类会移动的浮动标签，也禁止分支名。
+`.github/workflows/ci.yml` 调用 [burncloud/ci](https://github.com/burncloud/ci) 的共享工作流，用来在另一个仓库里跑出真实的检查名。
+
+调用方用 `@latest`。burncloud/ci 每次合并后先打 `vX.Y.Z`，再把 `latest` 移到同一提交。其他浮动名（`v1`、`main`）禁止。
 
 ## 用这个模板新建 crate 仓库
 
@@ -18,7 +20,7 @@ BurnCloud 各 Rust crate 仓库的模板。仓库根的清单、锁文件和工�
 
 下面的设置由新建仓库的人来做。本模板只把要求写在这里，不改组织设置，也不改任何仓库的规则集。
 
-调用方工作流 `.github/workflows/ci.yml` 的名字是 `CI`，不要改成 `Rust`。`uses` 钉在 `v1.0.0`（指向 `56aa8aabde61bc50e41e0b63ed345caa4810604a`）。检查名里的 `rust /` 来自 job id `rust`。
+调用方工作流 `.github/workflows/ci.yml` 的名字是 `CI`，不要改成 `Rust`。调用方用 `@latest`。burncloud/ci 每次合并后先打 `vX.Y.Z`，再把 `latest` 移到同一提交。其他浮动名（`v1`、`main`）禁止。检查名里的 `rust /` 来自 job id `rust`。
 
 ### 仓库必须公开
 
@@ -119,7 +121,7 @@ RUSTDOCFLAGS='-D warnings' cargo doc --locked --workspace --no-deps --all-featur
 
 ```bash
 git clone https://github.com/burncloud/ci.git .burncloud-ci
-git -C .burncloud-ci checkout v1.0.0
+git -C .burncloud-ci checkout latest
 cargo deny --config .burncloud-ci/deny.toml --manifest-path Cargo.toml check
 cargo audit
 bash .burncloud-ci/scripts/run-cargo-vet.sh .
